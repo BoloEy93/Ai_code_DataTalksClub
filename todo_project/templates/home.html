@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TODO List</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>TODO List</h1>
+        <form method="POST" action="{% url 'todos:create' %}">
+            {% csrf_token %}
+            <input type="text" name="task" placeholder="Add a new task" required>
+            <button type="submit">Add</button>
+        </form>
+        <ul>
+            {% for todo in todos %}
+                <li>
+                    {{ todo.task }} 
+                    <a href="{% url 'todos:edit' todo.id %}">Edit</a>
+                    <a href="{% url 'todos:delete' todo.id %}">Delete</a>
+                    {% if todo.is_resolved %}
+                        <span>(Resolved)</span>
+                    {% else %}
+                        <a href="{% url 'todos:resolve' todo.id %}">Mark as Resolved</a>
+                    {% endif %}
+                </li>
+            {% empty %}
+                <li>No tasks available.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
